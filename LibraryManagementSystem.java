@@ -1,4 +1,8 @@
-// program for library management of college 
+import java.util.Scanner;
+
+interface DataInput {
+    void getData();
+}
 
 class Librarys {
     private String title;
@@ -120,24 +124,38 @@ class Staff extends LibraryUser {
     }
 }
 
-public class LibraryManagementSystem {
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        Book book = new Book("\nJava", "harry", 100);
-        
-        AudioBook AB = new AudioBook("\n48 laws of power", "jack", 1000);
-        
-        Student student = new Student("\nhanumant", 10, 12);
+public class LibraryManagementSystem implements DataInput {
+    private static Book[] books;
 
+    public LibraryManagementSystem() {
+        books = new Book[2];
+        books[0] = new Book("Java", "Harry", 100);
+        books[1] = new Book("48 laws of power", "Jack", 1000);
+    }
+
+    public static void main(String[] args) {
+        LibraryManagementSystem librarySystem = new LibraryManagementSystem();
+        librarySystem.getData();
+    }
+
+    @Override
+    public void getData() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter book title to search: ");
+        String titleToSearch = scanner.nextLine();
         
-        Staff staff = new Staff("\nravi", 11, "lnformation Technology ");
+        boolean bookFound = false;
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(titleToSearch)) {
+                System.out.println("Book Found: " + book.getTitle() + " by " + book.getAuthor() + ", Pages: " + book.getPageCount());
+                bookFound = true;
+                break;
+            }
+        }
         
-        System.out.println("Book: " + book.getTitle() + " by " + book.getAuthor() + ", Pages: " + book.getPageCount());
-        System.out.println("AudioBook: " + AB.getTitle() + " by " + AB.getAuthor() + ", Duration: " + AB.getDuration() + " minutes");
-        System.out.println("Student: " + student.getName() + ", Grade: " + student.getGrade());
-        System.out.println("Staff: " + staff.getName() + ", Department: " + staff.getDepartment());
+        if (!bookFound) {
+            System.out.println("Book not found.");
+        }
     }
 
     public String toString() {
